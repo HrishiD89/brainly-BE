@@ -20,8 +20,9 @@ run().catch((err) => console.log(err));
 
 async function run() {
   await connect(
-    "mongodb+srv://hrishi:hrishi5892@cluster0.wwng9.mongodb.net/brainly_app"
+    process.env.MONGO_URL as string
   );
+
   console.log("Connected to MongoDB!");
   app.listen(PORT, () => {
     console.log("Server is running in port 3001");
