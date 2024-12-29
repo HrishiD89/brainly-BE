@@ -12,7 +12,7 @@ dotenv.config({ path: path.resolve(__dirname, "../..", ".env") });
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Explicitly type the request and response
-router.post("/signup", async (req: Request, res: Response) => {
+router.post("/auth/signup", async (req: Request, res: Response) => {
   try {
     // Validate data using Zod
     const validatedData = authSchema.safeParse(req.body);
@@ -60,7 +60,7 @@ router.post("/signup", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/signin", async (req: Request, res: Response) => {
+router.post("/auth/signin", async (req: Request, res: Response) => {
   try {
     // Validate data using Zod
     const validatedData = authSchema.safeParse(req.body);
