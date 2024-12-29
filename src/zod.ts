@@ -14,3 +14,5 @@ export const authSchema = z.object({
       .regex(/[\W_]/, "Password must contain at least one special character"),
   });
 
+  // Automatically infer the types from the schema
+export type AuthData = z.infer<typeof authSchema>;
