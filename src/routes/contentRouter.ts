@@ -73,7 +73,7 @@ router.get("/content", userMiddleware, async (req, res) => {
         .populate("userId", "username");
 
       res.status(200).json({
-        status : "success",
+        status: "success",
         message: "Content Fetched",
         contents: contents,
       });
@@ -116,37 +116,48 @@ router.delete("/content", userMiddleware, async (req, res) => {
 router.delete("/content/:contentId", userMiddleware, async (req, res) => {
   const userId = (req as any).userId;
   const contentId = req.params.contentId;
-  if (!userId) {
-    res.status(403).json({
-      status: "error",
-      message: "Unauthorized Access!",
+
+  try {
+    const deletedContent = await ContentModel.findOneAndDelete({
+      _id: contentId,
+      userId: userId,
     });
-  } else {
-    try {
-      const deletedContent = await ContentModel.findOneAndDelete({
-        _id: contentId,
-        userId: userId,
-      });
 
-      if (!deletedContent) {
-        res.status(404).json({
-          status: "error",
-          message: "Content not found or already deleted",
-        });
-      }
-
-      res.status(200).json({
-        status: "success",
-        message: "Content Deleted",
-        data: deletedContent,
-      });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({
+    if (!deletedContent) {
+      res.status(404).json({
         status: "error",
-        message: "Internal Server Error",
+        message: "Content not found or already deleted",
       });
     }
+
+    res.status(200).json({
+      status: "success",
+      message: "Content Deleted",
+      data: deletedContent,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
+  }
+});
+
+router.get("/tags", async (req, res) => {
+  try {
+    const tags = await TagModel.find();
+    res.status(200).json({
+      status: "success",
+      message: "Tags Fetched",
+      data: tags,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
+    });
   }
 });
 

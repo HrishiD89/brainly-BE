@@ -20,7 +20,7 @@ interface IContent extends Document {
   title: string;
   link: string;
   type: ContentTypes;
-  tags: Types.ObjectId[];
+  tags?: Types.ObjectId[];
   userId: Types.ObjectId;
 }
 

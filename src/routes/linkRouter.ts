@@ -12,9 +12,12 @@ router.post("/brain/share", userMiddleware, async (req, res) => {
       userId: userId,
     });
     if (existingLink) {
-      res.json({
+      res.status(200).json({
+        status: "success",
+        message: "Link Fetched",
         hash: existingLink?.hash,
       });
+      
     } else {
       const hash = random(10);
       const newLink = await ShareLinkModel.create({
@@ -25,7 +28,7 @@ router.post("/brain/share", userMiddleware, async (req, res) => {
         status: "success",
         message: "Link Created",
         data: newLink,
-        link: `http://localhost:3000/brain/${hash}`,
+        hash: hash,
       });
     }
   } else {
@@ -47,7 +50,7 @@ router.get("/brain/:shareLink",async(req,res)=>{
     if(link){
        const sharedContent = await ContentModel.find({
            userId:link.userId._id
-       }).populate("tags","title")
+       }).populate("tags","title").populate("userId","username");
        res.status(200).json({
         status : "success",
         username : link.userId.username,
